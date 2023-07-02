@@ -7,4 +7,4 @@ sealed class HomeUiEvent {
     data class AddToHistory(val searchText: String):HomeUiEvent()
     object ClearOrCloseSearchBar :HomeUiEvent()
     object ActiveDropDownMenu:HomeUiEvent()
-}
+ }

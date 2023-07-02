@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -103,11 +107,9 @@ fun PostCard(
             }
 
             var isDropDownMenuActive by remember { mutableStateOf(postCardUiState.isDropDownMenuActive) }
-            fun iss() {
-                isDropDownMenuActive = true
-            }
+
             Box(
-               modifier = Modifier
+                modifier = Modifier
                     .size(24.dp)
                     .clickable {
                         isDropDownMenuActive = true
@@ -145,7 +147,6 @@ fun PostCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 .clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop
@@ -156,12 +157,19 @@ fun PostCard(
 
                 .padding(horizontal = 20.dp, vertical = 10.dp)
         ) {
-            Icon(
-                painterResource(id = R.drawable.ic_heart),
-                contentDescription = "favorite",
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onBackground
-            )
+            var isLiked by remember {
+                mutableStateOf(postCardUiState.isLiked)
+            }
+            Box(Modifier.clickable {
+                isLiked=!isLiked
+            }) {
+                Icon(
+                   if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder ,
+                    contentDescription = "favorite",
+                    modifier = Modifier.size(24.dp),
+                    tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.onBackground
+                )
+            }
             Icon(
                 painterResource(id = R.drawable.comment_dots),
                 contentDescription = "more",

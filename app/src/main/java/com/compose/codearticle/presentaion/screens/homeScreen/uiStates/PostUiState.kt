@@ -11,7 +11,7 @@ data class PostUiState(
     val comments: List<String?>? = null,
     var saveToLocal: Boolean = false,
     var isDropDownMenuActive: Boolean = false,
- )
+  )
 
 data class PostedBy(
     val _id: String? = null,

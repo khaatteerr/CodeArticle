@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
+import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostUiState
+import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostedBy
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -36,6 +38,11 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
 
+
+
+
+
+
     fun onEvent(event: HomeUiEvent) {
         when (event) {
             is HomeUiEvent.SearchTextChanged -> {
@@ -65,6 +72,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             is HomeUiEvent.ActiveDropDownMenu -> {
 
             }
+
 
         }
     }
