@@ -1,5 +1,6 @@
 package com.compose.codearticle.presentaion.screens.settingScreen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,23 +28,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.compose.codearticle.R
-import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.SettingItemUiState
 import com.compose.codearticle.presentaion.screens.settingScreen.composabels.SettingItemCard
+import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.SettingUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
 
 @Composable
-fun SettingScreen(navController: NavController) {
-    SettingContent(navController)
+fun SettingScreen(
+    navController: NavController,
+    settingScreenViewModel: SettingScreenViewModel = hiltViewModel()
+) {
+    SettingContent(navController, settingScreenViewModel)
 }
 
 @Composable
-fun SettingContent(navController: NavController) {
+fun SettingContent(navController: NavController, settingScreenViewModel: SettingScreenViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +56,7 @@ fun SettingContent(navController: NavController) {
             .padding(start = 20.dp, end = 20.dp, top = 20.dp)
     ) {
         UserProfileSection(navController)
-        AccountAndSecuritySection()
+        AccountAndSecuritySection(settingScreenViewModel)
     }
 }
 
@@ -142,7 +147,7 @@ fun UserProfileSection(navController: NavController) {
 }
 
 @Composable
-fun AccountAndSecuritySection() {
+fun AccountAndSecuritySection(settingScreenViewModel: SettingScreenViewModel) {
     Text(
         text = "Account and Security",
         fontSize = 15.sp,
@@ -151,16 +156,7 @@ fun AccountAndSecuritySection() {
         color = MaterialTheme.colorScheme.inversePrimary.copy(0.5f),
         modifier = Modifier.padding(top = 25.dp, bottom = 10.dp, start = 5.dp)
     )
-    val list = listOf(
-        SettingItemUiState(R.drawable.update_data, "Update data"),
-        SettingItemUiState(R.drawable.language, "Language", "English"),
-        SettingItemUiState(R.drawable.password_check, "Change password"),
-        SettingItemUiState(R.drawable.dark_mode, "Dark Mode", "night"),
-        SettingItemUiState(R.drawable.rate_us, "Rate us"),
-        SettingItemUiState(R.drawable.terms, "Terms & Conditions"),
-        SettingItemUiState(R.drawable.privacy, "Privacy policy"),
-        SettingItemUiState(R.drawable.logout, "Logout")
-    )
+
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         modifier = Modifier
@@ -171,9 +167,10 @@ fun AccountAndSecuritySection() {
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(10.dp)
         ) {
+            settingScreenViewModel.settingsUiState.accountAndSecurity.forEach {
+                SettingItemCard(it , settingScreenViewModel)
 
-            list.take(4).forEach {
-                SettingItemCard(it)
+
             }
         }
 
@@ -199,8 +196,13 @@ fun AccountAndSecuritySection() {
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .padding(10.dp)
         ) {
-            list.takeLast(4).forEach {
-                SettingItemCard(it)
+            settingScreenViewModel.settingsUiState.general.forEach {
+                SettingItemCard(it, settingScreenViewModel)
+            }
+            val current = LocalContext.current
+
+            if (settingScreenViewModel.settingsUiState.isDarkMode){
+                Toast.makeText(current ,"Is",Toast.LENGTH_LONG).show()
             }
         }
     }

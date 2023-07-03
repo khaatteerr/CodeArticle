@@ -1,6 +1,8 @@
 package com.compose.codearticle.presentaion.screens.settingScreen.composabels
 
 import android.annotation.SuppressLint
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -10,27 +12,39 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.compose.codearticle.presentaion.screens.settingScreen.SettingScreenViewModel
 import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.SettingItemUiState
+import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.SettingUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun SettingItemCard(
-    card: SettingItemUiState
-) {
+    card: SettingItemUiState,
+    settingScreenViewModel: SettingScreenViewModel,
+
+ ) {
+    val current = LocalContext.current
 
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .clickable {
+                if (card.settingName == "Dark Mode"){
+                    settingScreenViewModel.onEvent(SettingUiEvent.DarkMode)
+                }
+            }
 
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
+
         Box(
             modifier = Modifier
                 .size(30.dp),

@@ -108,7 +108,7 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
                     "https://images.unsplash.com/photo-1661355103273-e3fc8ad60c68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNTUzMjl8MHwxfHNlYXJjaHw0NzQ0fHx2ZXJ0aWNhbHxlbnwwfDF8fHwxNjYxNjI5MDIx&ixlib=rb-1.2.1&q=80&w=1080",
                     "Sky:\n" +
                             "The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As "
-                 ,   "3"
+                    ,   "3"
                 ),
                 PostUiState(
                     PostedBy(
@@ -121,7 +121,7 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
                     "https://images.unsplash.com/photo-1610736702440-9dfab24cd7da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNTUzMjl8MHwxfHNlYXJjaHw3Njd8fE1vYmlsZSUyMFdhbGxwYXBlcnN8ZW58MHwxfHx8MTY2MTYzMTcyMw&ixlib=rb-1.2.1&q=80&w=1080",
                     "Sky:\n" +
                             "The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As "
-                  ,  "4"
+                    ,  "4"
                 ),
             ), navController, homeViewModel
         )
