@@ -42,8 +42,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DarkModeBottomSheet(
-    isDarkMode: () -> Unit,
-    isLightMode: () -> Unit,
     onDismiss: () -> Unit,
     themeViewModel: ThemeViewModel = hiltViewModel()
 ) {
@@ -138,14 +136,17 @@ fun DarkModeBottomSheet(
                                     scope
                                         .launch { bottomSheetState.hide() }
                                         .invokeOnCompletion {
-                                            isLightMode()
+
                                             if (themeState.isDarkMode)
                                                 themeViewModel.toggleTheme()
+                                            onDismiss()
                                         }
                                 }
                                 .size(100.dp)
                                 .padding(bottom = 10.dp)
-                                .border(2.dp , if (themeState.isDarkMode) Color.Transparent else Color.Black,
+                                .border(
+                                    2.dp,
+                                    if (themeState.isDarkMode) Color.Transparent else Color.Black,
                                     RoundedCornerShape(15.dp)
                                 )
                                 .clip(RoundedCornerShape(15.dp))
@@ -184,15 +185,19 @@ fun DarkModeBottomSheet(
                                     scope
                                         .launch { bottomSheetState.hide() }
                                         .invokeOnCompletion {
-                                            isDarkMode()
+
                                             if (themeState.isDarkMode.not())
                                                 themeViewModel.toggleTheme()
+                                            onDismiss()
                                         }
                                 }
                                 .size(100.dp)
                                 .padding(bottom = 10.dp)
-                                .border(2.dp , if (themeState.isDarkMode) Color.Black else Color.Transparent,
-                                    RoundedCornerShape(15.dp))
+                                .border(
+                                    2.dp,
+                                    if (themeState.isDarkMode) Color.Black else Color.Transparent,
+                                    RoundedCornerShape(15.dp)
+                                )
                                 .clip(RoundedCornerShape(15.dp))
                                 .background(Color.DarkGray)
 

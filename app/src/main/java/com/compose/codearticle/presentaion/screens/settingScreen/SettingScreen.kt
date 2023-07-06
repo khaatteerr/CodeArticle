@@ -171,28 +171,21 @@ fun AccountAndSecuritySection(
 
         ) {
             settingScreenViewModel.settingsUiState.accountAndSecurity.forEach {
-                SettingItemCard(it, settingScreenViewModel) {
+                SettingItemCard(it,settingScreenViewModel) {
                     when (it.settingName) {
                         Constants.DarkMode -> {
                             settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
                         }
-
                         Constants.UpdateData -> {}
                         Constants.ChangePassword -> {}
-                        Constants.Language -> {}
+
                     }
 
                 }
             }
             if (settingScreenViewModel.settingsUiState.isDarkModeBottomSheetActive) {
                 DarkModeBottomSheet(
-                    isDarkMode = {
-                        settingScreenViewModel.onEvent(SettingUiEvent.DarkMode(true))
-                      settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
-                    },
-                    isLightMode = {
-                        settingScreenViewModel.onEvent(SettingUiEvent.DarkMode(false))
-                        settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet) },
+
                     onDismiss = {
                         settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
                     })
@@ -221,7 +214,7 @@ fun AccountAndSecuritySection(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
             settingScreenViewModel.settingsUiState.general.forEach {
-                SettingItemCard(it, settingScreenViewModel) {
+                SettingItemCard(it,settingScreenViewModel) {
                     when (it.settingName) {
                         Constants.RateUs -> {
                             // Navigate to rate us screen

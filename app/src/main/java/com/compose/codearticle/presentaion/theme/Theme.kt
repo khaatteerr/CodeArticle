@@ -48,7 +48,7 @@ private val LightColorScheme = lightColorScheme(
     surface = Color(0xFFBDC3C7),
     onSurface = Color.Black,
     error = Color.Red.copy(0.7f),
-    surfaceVariant = BottomBarIcon,
+    surfaceVariant = Color(0xFFBDC3C7),
     inversePrimary = Color.Black,
     outline = DarkGray0_2,
 
