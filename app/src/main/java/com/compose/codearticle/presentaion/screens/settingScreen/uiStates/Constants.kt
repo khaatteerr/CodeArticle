@@ -1,6 +1,7 @@
 package com.compose.codearticle.presentaion.screens.settingScreen.uiStates
 
 import com.compose.codearticle.R
+import org.intellij.lang.annotations.Language
 
 object Constants {
     val accountAndSecurity = listOf(
@@ -15,4 +16,17 @@ object Constants {
         SettingItemUiState(R.drawable.privacy, "Privacy policy"),
         SettingItemUiState(R.drawable.logout, "Logout")
     )
+
+
+
+    const val UpdateData = "Update data"
+    const val Language = "Language"
+    const val ChangePassword = "Change password"
+    const val DarkMode  = "Dark Mode"
+
+    const val RateUs = "Rate us"
+    const val Terms = "Terms & Conditions"
+    const val Privacy = "Privacy policy"
+    const val Logout  = "Logout"
+
 }

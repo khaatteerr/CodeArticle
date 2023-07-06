@@ -2,6 +2,7 @@ package com.compose.codearticle.presentaion.screens.settingScreen.uiStates
 
 sealed class SettingUiEvent{
     object Logout:SettingUiEvent()
-    object  DarkMode:SettingUiEvent()
+    data class  DarkMode(val isDarkMode :Boolean):SettingUiEvent()
     data class ChangeLanguage(val language:Int):SettingUiEvent()
+    object OpenCloseBottomSheet:SettingUiEvent()
 }

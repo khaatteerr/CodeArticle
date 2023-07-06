@@ -6,5 +6,5 @@ sealed class HomeUiEvent {
     data class SearchBarActive(val active : Boolean):HomeUiEvent()
     data class AddToHistory(val searchText: String):HomeUiEvent()
     object ClearOrCloseSearchBar :HomeUiEvent()
-    object ActiveDropDownMenu:HomeUiEvent()
+
  }

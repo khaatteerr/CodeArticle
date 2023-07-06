@@ -1,6 +1,5 @@
 package com.compose.codearticle.presentaion.screens.settingScreen
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,14 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.compose.codearticle.presentaion.screens.settingScreen.composabels.DarkModeBottomSheet
 import com.compose.codearticle.presentaion.screens.settingScreen.composabels.SettingItemCard
+import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.Constants
 import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.SettingUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
 
@@ -56,7 +56,7 @@ fun SettingContent(navController: NavController, settingScreenViewModel: Setting
             .padding(start = 20.dp, end = 20.dp, top = 20.dp)
     ) {
         UserProfileSection(navController)
-        AccountAndSecuritySection(settingScreenViewModel)
+        AccountAndSecuritySection(settingScreenViewModel, navController)
     }
 }
 
@@ -147,7 +147,10 @@ fun UserProfileSection(navController: NavController) {
 }
 
 @Composable
-fun AccountAndSecuritySection(settingScreenViewModel: SettingScreenViewModel) {
+fun AccountAndSecuritySection(
+    settingScreenViewModel: SettingScreenViewModel,
+    navController: NavController
+) {
     Text(
         text = "Account and Security",
         fontSize = 15.sp,
@@ -165,13 +168,36 @@ fun AccountAndSecuritySection(settingScreenViewModel: SettingScreenViewModel) {
             Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(10.dp)
+
         ) {
             settingScreenViewModel.settingsUiState.accountAndSecurity.forEach {
-                SettingItemCard(it , settingScreenViewModel)
+                SettingItemCard(it, settingScreenViewModel) {
+                    when (it.settingName) {
+                        Constants.DarkMode -> {
+                            settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
+                        }
 
+                        Constants.UpdateData -> {}
+                        Constants.ChangePassword -> {}
+                        Constants.Language -> {}
+                    }
 
+                }
             }
+            if (settingScreenViewModel.settingsUiState.isDarkModeBottomSheetActive) {
+                DarkModeBottomSheet(
+                    isDarkMode = {
+                        settingScreenViewModel.onEvent(SettingUiEvent.DarkMode(true))
+                      settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
+                    },
+                    isLightMode = {
+                        settingScreenViewModel.onEvent(SettingUiEvent.DarkMode(false))
+                        settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet) },
+                    onDismiss = {
+                        settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
+                    })
+            }
+
         }
 
 
@@ -188,22 +214,35 @@ fun AccountAndSecuritySection(settingScreenViewModel: SettingScreenViewModel) {
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         modifier = Modifier
-
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(10.dp)
         ) {
             settingScreenViewModel.settingsUiState.general.forEach {
-                SettingItemCard(it, settingScreenViewModel)
-            }
-            val current = LocalContext.current
+                SettingItemCard(it, settingScreenViewModel) {
+                    when (it.settingName) {
+                        Constants.RateUs -> {
+                            // Navigate to rate us screen
+                        }
 
-            if (settingScreenViewModel.settingsUiState.isDarkMode){
-                Toast.makeText(current ,"Is",Toast.LENGTH_LONG).show()
+                        Constants.Privacy -> {
+                            // Navigate to privacy screen
+                        }
+
+                        Constants.Terms -> {
+                            // Navigate to terms screen
+                        }
+
+                        Constants.Logout -> {
+                            // Handle logout logic
+                        }
+                    }
+                }
             }
+
+
         }
     }
 }

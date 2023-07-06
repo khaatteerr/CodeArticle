@@ -4,6 +4,22 @@ data class PostUiState(
     val postedBy: PostedBy? = null,
     val createdAt: String = "",
     val postImage: String = "",
+    var postDescription: String = "",
+    var id: String = "-1",
+    var isLiked: Boolean = false,
+    val likes: List<String?>? = null,
+    val comments: List<String?>? = null,
+    var isSavedToLocal: Boolean = false,
+    var isDropDownMenuActive: Boolean = false,
+    val changeLikeState: () -> Unit,
+    val changeDropDownMenuState: () -> Unit,
+    val SaveToLocal: () -> Unit
+)
+
+data class PostModel(
+    val postedBy: PostedBy? = null,
+    val createdAt: String = "",
+    val postImage: String = "",
     val postDescription: String = "",
     var id: String = "-1",
     var isLiked: Boolean = false,
@@ -11,7 +27,7 @@ data class PostUiState(
     val comments: List<String?>? = null,
     var saveToLocal: Boolean = false,
     var isDropDownMenuActive: Boolean = false,
-  )
+)
 
 data class PostedBy(
     val _id: String? = null,
