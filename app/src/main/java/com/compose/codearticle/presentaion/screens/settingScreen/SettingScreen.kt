@@ -19,13 +19,21 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,11 +41,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.compose.codearticle.presentaion.navigation.Screen
 import com.compose.codearticle.presentaion.screens.settingScreen.composabels.DarkModeBottomSheet
 import com.compose.codearticle.presentaion.screens.settingScreen.composabels.SettingItemCard
 import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.Constants
 import com.compose.codearticle.presentaion.screens.settingScreen.uiStates.SettingUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
+import com.compose.codearticle.presentaion.utilities.MainDialog
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingScreen(
@@ -176,8 +188,12 @@ fun AccountAndSecuritySection(
                         Constants.DarkMode -> {
                             settingScreenViewModel.onEvent(SettingUiEvent.OpenCloseBottomSheet)
                         }
-                        Constants.UpdateData -> {}
-                        Constants.ChangePassword -> {}
+                        Constants.UpdateData -> {
+                            navController.navigate(Screen.UpdateDataScreen.route)
+                        }
+                        Constants.ChangePassword -> {
+                            navController.navigate(Screen.ChangePasswordScreen.route)
+                        }
 
                     }
 
@@ -203,7 +219,9 @@ fun AccountAndSecuritySection(
         color = MaterialTheme.colorScheme.inversePrimary.copy(0.5f),
         modifier = Modifier.padding(top = 25.dp, bottom = 10.dp, start = 5.dp)
     )
-
+    var logoutState by remember {
+        mutableStateOf(false)
+    }
     Card(
         elevation = CardDefaults.cardElevation(15.dp),
         modifier = Modifier
@@ -213,29 +231,44 @@ fun AccountAndSecuritySection(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
+
             settingScreenViewModel.settingsUiState.general.forEach {
                 SettingItemCard(it,settingScreenViewModel) {
                     when (it.settingName) {
                         Constants.RateUs -> {
-                            // Navigate to rate us screen
+                            navController.navigate(Screen.RateUsScreen.route)
                         }
 
                         Constants.Privacy -> {
-                            // Navigate to privacy screen
+                            navController.navigate(Screen.PrivacyScreen.route)
                         }
 
                         Constants.Terms -> {
-                            // Navigate to terms screen
+                            navController.navigate(Screen.TermsScreen.route)
                         }
 
                         Constants.Logout -> {
-                            // Handle logout logic
+                            logoutState = !logoutState
                         }
                     }
                 }
+
             }
-
-
         }
+    }
+    if (logoutState){
+        MainDialog {
+            val scope = rememberCoroutineScope()
+            CircularProgressIndicator(modifier = Modifier
+                .size(50.dp)
+                  ,color = Color.Red)
+            LaunchedEffect(key1 =  logoutState){
+                scope .launch {
+                    delay(3000)
+                    navController.navigate(Screen.HomeScreen.route)
+                }
+            }
+        }
+
     }
 }

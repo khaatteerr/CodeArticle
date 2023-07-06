@@ -58,10 +58,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.compose.codearticle.R
-import com.compose.codearticle.presentaion.screens.publishScreen.composables.AlertDialogSample
+import com.compose.codearticle.presentaion.screens.publishScreen.composables.PublishScreenDialog
 import com.compose.codearticle.presentaion.screens.publishScreen.uiStates.PublishPostUiEvent
 import com.compose.codearticle.presentaion.theme.Orange0_7
 import com.compose.codearticle.presentaion.theme.Ubuntu
+import com.compose.codearticle.presentaion.utilities.MainDialog
 
 
 @Composable
@@ -106,8 +107,10 @@ fun PostArticle(
 ) {
     Column(Modifier.fillMaxSize()) {
 
-        PostOrBackSection(postArticleViewModel) {
-            postArticleViewModel.onEvent(PublishPostUiEvent.Cancel)
+        PostOrBackSection(postArticleViewModel, navController) {
+            if (postArticleViewModel.postScreenState.postDescription.text.isNotBlank() || postArticleViewModel.postScreenState.isImageVisible)
+                postArticleViewModel.onEvent(PublishPostUiEvent.CancelPost) else
+                navController.popBackStack()
         }
 
 
@@ -123,6 +126,7 @@ fun PostArticle(
 @Composable
 fun PostOrBackSection(
     postArticleViewModel: PostArticleViewModel,
+    navController: NavController,
     onCancelClick: () -> Unit,
 ) {
 
@@ -285,8 +289,7 @@ fun DescriptionAndImageSection(postArticleViewModel: PostArticleViewModel) {
             enter = slideInVertically { it },
             exit = slideOutVertically { it },
             modifier = Modifier
-                .align(CenterHorizontally)
-                 ,
+                .align(CenterHorizontally),
         ) {
             Box(
                 Modifier
@@ -301,8 +304,8 @@ fun DescriptionAndImageSection(postArticleViewModel: PostArticleViewModel) {
                     }, contentAlignment = Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add, contentDescription = null,
-
+                    painter = painterResource(id = R.drawable.add_image), contentDescription = "Add Image",
+                    modifier = Modifier.size(24.dp)
                     )
             }
         }
@@ -317,17 +320,21 @@ fun DescriptionAndImageSection(postArticleViewModel: PostArticleViewModel) {
 @Composable
 fun IsDialogShown(postArticleViewModel: PostArticleViewModel, navController: NavController) {
     if (postArticleViewModel.postScreenState.isDialogShown) {
-        AlertDialogSample(
-            onDismiss = { postArticleViewModel.onEvent(PublishPostUiEvent.DismissDialog) },
-            onConfirm = { postArticleViewModel.onEvent(PublishPostUiEvent.SaveDialog) },
-            onDiscard = { navController.popBackStack() })
+        MainDialog {
+            PublishScreenDialog(
+                { postArticleViewModel.onEvent(PublishPostUiEvent.DismissDialog) },
+                { postArticleViewModel.onEvent(PublishPostUiEvent.SaveDialog) },
+                { navController.popBackStack() })
+        }
     }
     BackHandler {
-        postArticleViewModel.onEvent(PublishPostUiEvent.Cancel)
+        if (postArticleViewModel.postScreenState.postDescription.text.isNotBlank() || postArticleViewModel.postScreenState.isImageVisible)
+            postArticleViewModel.onEvent(PublishPostUiEvent.CancelPost) else
+            navController.popBackStack()
     }
 }
 
-fun isPostEnable(postArticleViewModel: PostArticleViewModel){
+fun isPostEnable(postArticleViewModel: PostArticleViewModel) {
     val colorList = listOf(Orange0_7.toArgb(), DarkGray.toArgb())
     postArticleViewModel.onEvent(PublishPostUiEvent.IsPublishEnable(colorList))
 }

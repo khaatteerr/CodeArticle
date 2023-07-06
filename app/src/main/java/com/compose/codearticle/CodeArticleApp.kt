@@ -60,6 +60,7 @@ fun CodeArticleApp() {
     val bottomBarHeight = 55.dp
     val bottomBarHeightPx = with(LocalDensity.current) { bottomBarHeight.roundToPx().toFloat() }
     val bottomBarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
+    val ballBottomBarOffsetHeightPx = 10
 
 
 // connection to the nested scroll system and listen to the scroll
@@ -92,7 +93,7 @@ fun CodeArticleApp() {
                             .offset {
                                 IntOffset(
                                     x = 0,
-                                    y = -bottomBarOffsetHeightPx.value.roundToInt()
+                                    y = -bottomBarOffsetHeightPx.value.roundToInt() + ballBottomBarOffsetHeightPx
                                 )
                             }
                             .height(bottomBarHeight),
@@ -161,8 +162,16 @@ fun CodeArticleApp() {
 
 fun isBottomBarVisible(backStackEntry: State<NavBackStackEntry?>): Boolean {
     return listOf(
-        Screen.PostScreen.route,
+
         //Add Any screen that you need to hide bottom Navigation on it
+
+        Screen.PostScreen.route,
+        Screen.UpdateDataScreen.route,
+        Screen.ChangePasswordScreen.route,
+        Screen.RateUsScreen.route,
+        Screen.TermsScreen.route,
+        Screen.PrivacyScreen.route
+
     ).any { it == backStackEntry.value?.destination?.route }.not()
 }
 

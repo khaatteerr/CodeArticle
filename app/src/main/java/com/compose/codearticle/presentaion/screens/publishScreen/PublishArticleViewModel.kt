@@ -78,8 +78,8 @@ class PostArticleViewModel @Inject constructor(
                 postArticle()
             }
 
-            is PublishPostUiEvent.Cancel -> {
-                postScreenState = postScreenState.copy(isDialogShown = true)
+            is PublishPostUiEvent.CancelPost -> {
+              postScreenState = postScreenState.copy(isDialogShown = true)
             }
 
             is PublishPostUiEvent.DismissDialog -> {

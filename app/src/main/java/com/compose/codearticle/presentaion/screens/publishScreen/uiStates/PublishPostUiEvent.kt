@@ -6,7 +6,7 @@ sealed class PublishPostUiEvent {
 
     data class DescriptionTextChanged(var text: String) : PublishPostUiEvent()
     object Publish : PublishPostUiEvent()
-    object Cancel :PublishPostUiEvent()
+    object CancelPost :PublishPostUiEvent()
     object DismissDialog:PublishPostUiEvent()
     object SaveDialog:PublishPostUiEvent()
     data class SelectedImage(var image: Uri) :PublishPostUiEvent()
