@@ -65,7 +65,7 @@ fun SettingContent(navController: NavController, settingScreenViewModel: Setting
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 30.dp)
     ) {
         UserProfileSection(navController)
         AccountAndSecuritySection(settingScreenViewModel, navController)
@@ -104,14 +104,14 @@ fun UserProfileSection(navController: NavController) {
         }
 
         Card(
-            elevation = CardDefaults.cardElevation(15.dp),
+            elevation = CardDefaults.cardElevation(1.dp),
             modifier = Modifier
 
                 .padding(top = 30.dp)
                 .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
                 .height(80.dp),
             colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                containerColor = MaterialTheme.colorScheme.primary
             )
         ) {
             Row(
@@ -173,13 +173,13 @@ fun AccountAndSecuritySection(
     )
 
     Card(
-        elevation = CardDefaults.cardElevation(15.dp),
+       elevation = CardDefaults.cardElevation( 1.dp),
         modifier = Modifier
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(MaterialTheme.colorScheme.primary)
 
         ) {
             settingScreenViewModel.settingsUiState.accountAndSecurity.forEach {
@@ -223,13 +223,13 @@ fun AccountAndSecuritySection(
         mutableStateOf(false)
     }
     Card(
-        elevation = CardDefaults.cardElevation(15.dp),
+        elevation = CardDefaults.cardElevation( 1.dp),
         modifier = Modifier
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(MaterialTheme.colorScheme.primary)
         ) {
 
             settingScreenViewModel.settingsUiState.general.forEach {

@@ -4,7 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.CommentedBy
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
+import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.ImageMedia
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostModel
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostUiState
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostedBy
@@ -40,6 +42,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     }
 
     init {
+
         val oldList = listOf(
             PostModel(
                 PostedBy(
@@ -48,11 +51,14 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                     "Ahmed Khater"
                 ),
                 "2 hours ago",
-                "https://i.redd.it/vr2o7iiob5k91.jpg",
-                "Sky:\n" +
-                        "The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
-                id = "1"
+
+                postDescription = "Sky The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "1",
+                likes = 3,
+                comments_count = 10,
+                media = ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
             ),
+
             PostModel(
                 PostedBy(
                     "2",
@@ -61,10 +67,11 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 ),
 
                 "5 hours ago",
-                "https://images.unsplash.com/photo-1580615633247-58fedbee9197?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNTUzMjl8MHwxfHNlYXJjaHw0NzQ4fHx2ZXJ0aWNhbHxlbnwwfDF8fHwxNjYxNjI5MDIx&ixlib=rb-1.2.1&q=80&w=1080",
-                "Sky:\n" +
-                        "The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
-                id = "2"
+                media =ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky: The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "2",
+                likes = 4,
+                comments_count = 20
             ),
             PostModel(
                 PostedBy(
@@ -74,10 +81,11 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 ),
 
                 "yesterday",
-                "https://images.unsplash.com/photo-1661355103273-e3fc8ad60c68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNTUzMjl8MHwxfHNlYXJjaHw0NzQ0fHx2ZXJ0aWNhbHxlbnwwfDF8fHwxNjYxNjI5MDIx&ixlib=rb-1.2.1&q=80&w=1080",
-                "Sky:\n" +
-                        "The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
-                id = "3"
+                media = ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky:The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "3",
+                likes = 10,
+                comments_count = 15
             ),
             PostModel(
                 PostedBy(
@@ -87,11 +95,81 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 ),
 
                 "2 hours ago",
-                "https://images.unsplash.com/photo-1610736702440-9dfab24cd7da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNTUzMjl8MHwxfHNlYXJjaHw3Njd8fE1vYmlsZSUyMFdhbGxwYXBlcnN8ZW58MHwxfHx8MTY2MTYzMTcyMw&ixlib=rb-1.2.1&q=80&w=1080",
-                "Sky:\n" +
-                        "The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
-                id = "4"
-            )
+                media =  ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky:The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "4",
+                likes = 20,
+                comments_count =  17
+            ),
+            PostModel(
+                PostedBy(
+                    "1",
+                    avatar = "https://nationaltoday.com/wp-content/uploads/2022/04/Cristiano-Ronaldo-Birthday.jpg",
+                    "Ahmed Khater"
+                ),
+                "2 hours ago",
+                media = ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky:The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "5",
+                likes = 5,
+                comments_count =  2
+            ),
+            PostModel(
+                PostedBy(
+                    "2",
+                    avatar = "https://cloudfront-us-east-2.images.arcpublishing.com/reuters/XEEPZPVPD5O4RO76334OJYCQ4M.jpg",
+                    "Khaled Abady"
+                ),
+
+                "5 hours ago",
+                media =  ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky: The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "6",
+                likes = 6,
+                comments_count =  100
+            ),
+            PostModel(
+                PostedBy(
+                    "3",
+                    avatar = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Sergio_Ramos_Interview_2021.jpg/280px-Sergio_Ramos_Interview_2021.jpg",
+                    "Salem Gamal"
+                ),
+
+                "yesterday",
+                media =   ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky:The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "7",
+                likes = 1,
+                comments_count = 2
+            ),
+            PostModel(
+                PostedBy(
+                    "4",
+                    avatar = "https://cdn.24.co.za/files/Cms/General/d/2694/af1c6139c4a54413844c145b2e67dee4.jpg",
+                    "Mohamed Reda"
+                ),
+
+                "2 hours ago",
+                media =     ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky:The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "8",
+                likes = 7,
+                comments_count =  1
+            ),
+            PostModel(
+                PostedBy(
+                    "4",
+                    avatar = "https://cdn.24.co.za/files/Cms/General/d/2694/af1c6139c4a54413844c145b2e67dee4.jpg",
+                    "Mohamed Reda"
+                ),
+
+                "2 hours ago",
+                media = ImageMedia("https://i.redd.it/vr2o7iiob5k91.jpg",1080 ,720),
+                "Sky:The sky, a vast expanse stretching endlessly above, is a mesmerizing tapestry of celestial wonders. It encompasses the boundless realm that connects us to the universe, revealing its awe-inspiring secrets. During the day, the sky unfolds in a symphony of vibrant hues, from the crisp azure of a cloudless sky to the fiery embrace of the sun's golden rays. Wispy clouds dance across the canvas, casting playful shadows upon the earth below. As ",
+                id = "9",
+                likes = 7,
+                comments_count = 9
+            ),
         )
 
 
@@ -102,18 +180,22 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 isDropDownMenuActive = posts.isDropDownMenuActive,
                 isSavedToLocal = posts.saveToLocal,
                 likes = posts.likes,
-                comments = posts.comments,
+                comments_count = posts.comments_count,
                 isLiked = posts.isLiked,
                 postDescription = posts.postDescription,
-                postImage = posts.postImage,
+                media = posts.media,
                 createdAt = posts.createdAt,
 
                 changeLikeState = {
                     postsUiState = postsUiState.copy(
                         posts = postsUiState.posts.updateState(posts.id) { oldPost ->
-                            oldPost.copy(isLiked = oldPost.isLiked.not())
+                            oldPost.copy(
+                                isLiked = oldPost.isLiked.not(),
+                                likes = if (oldPost.isLiked) oldPost.likes?.dec() else oldPost.likes?.inc()
+                            )
                         }
                     )
+
                 }, changeDropDownMenuState = {
                     postsUiState = postsUiState.copy(
                         posts = postsUiState.posts.updateState(posts.id) { oldPost ->

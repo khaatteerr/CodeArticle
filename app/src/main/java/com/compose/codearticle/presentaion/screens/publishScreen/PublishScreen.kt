@@ -85,27 +85,21 @@ fun PostContent(
         mutableStateOf(false)
     }
 
-    AnimatedVisibility(
-        visible = animatedUp,
-        enter = slideInVertically { it / 2 },
-        exit = slideOutVertically { it / 2 }
-    ) {
+
         Box(Modifier.fillMaxSize()) {
             PostArticle(navController, postArticleViewModel = postArticleViewModel)
         }
     }
-    LaunchedEffect(key1 = Unit) {
-        animatedUp = !animatedUp
-    }
 
-}
+
+
 
 @Composable
 fun PostArticle(
     navController: NavController,
     postArticleViewModel: PostArticleViewModel,
 ) {
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().padding(top = 30.dp)) {
 
         PostOrBackSection(postArticleViewModel, navController) {
             if (postArticleViewModel.postScreenState.postDescription.text.isNotBlank() || postArticleViewModel.postScreenState.isImageVisible)

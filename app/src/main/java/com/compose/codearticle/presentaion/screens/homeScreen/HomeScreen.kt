@@ -1,25 +1,24 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.compose.codearticle.presentaion.screens.homeScreen
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,12 +43,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.compose.codearticle.R
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.PostCard
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
-import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostUiState
-import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostedBy
 import com.compose.codearticle.presentaion.theme.Ubuntu
 
 @Composable
@@ -64,14 +61,13 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
     Column(
         Modifier
             .fillMaxSize()
+            .padding(top = 25.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         SearchSection(homeViewModel)
 
-        PostsSections(homeViewModel.postsUiState.posts
-
-             , navController, homeViewModel
+        PostsSections(
+            navController, homeViewModel
         )
     }
 
@@ -88,33 +84,44 @@ fun SearchSection(homeViewModel: HomeViewModel) {
 
 
     val screenAfterSearch = screenWidth - 120.dp
-    val searchBarSize by animateDpAsState(if (homeViewModel.postsUiState.isSearchBarActive) screenWidth else screenAfterSearch)
-    val searchBarHeight by animateDpAsState(if (homeViewModel.postsUiState.isSearchBarActive) screenHeight else 50.dp)
+    val searchBarSize by animateDpAsState(
+        if (homeViewModel.postsUiState.isSearchBarActive) screenWidth else screenAfterSearch,
+        label = "searchBarSize"
+    )
+    val searchBarHeight by animateDpAsState(
+        if (homeViewModel.postsUiState.isSearchBarActive) screenHeight else 40.dp,
+        label = "searchBarHeight"
+    )
 
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 10.dp),
-        verticalAlignment = Alignment.Bottom
+            .background(MaterialTheme.colorScheme.primary),
+        verticalAlignment = Alignment.CenterVertically
     ) {
+
         AnimatedVisibility(
             visible = homeViewModel.postsUiState.isSearchBarActive.not()
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = "https://pixlr.com/images/index/remove-bg.webp"),
+            AsyncImage(
+                model = "https://pixlr.com/images/index/remove-bg.webp",
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(top = 20.dp, end = 10.dp, start = 20.dp)
                     .animateContentSize()
                     .size(35.dp)
                     .clip(CircleShape),
                 contentDescription = "Profile Image",
                 contentScale = ContentScale.Crop,
-                alignment = Alignment.Center
+                alignment = Alignment.Center,
+                placeholder = painterResource(R.drawable.baseline_crop_landscape_24),
+                error = painterResource(id = R.drawable.baseline_crop_landscape_24),
             )
         }
+
         SearchBar(
             modifier = Modifier
+                .padding(bottom = 25.dp)
                 .height(searchBarHeight)
                 .width(searchBarSize),
             query = homeViewModel.postsUiState.textSearch,
@@ -131,8 +138,10 @@ fun SearchSection(homeViewModel: HomeViewModel) {
                 Text(
                     text = "Search",
                     fontFamily = Ubuntu,
-
-                    )
+                    modifier = Modifier
+                        .requiredHeightIn(40.dp)
+                        .padding(top = 10.dp)
+                )
             },
             leadingIcon = {
                 Icon(
@@ -145,9 +154,11 @@ fun SearchSection(homeViewModel: HomeViewModel) {
             trailingIcon = {
                 if (homeViewModel.postsUiState.isSearchBarActive) {
                     Icon(
-                        modifier = Modifier.clip(CircleShape).clickable {
-                            homeViewModel.onEvent(HomeUiEvent.ClearOrCloseSearchBar)
-                        },
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable {
+                                homeViewModel.onEvent(HomeUiEvent.ClearOrCloseSearchBar)
+                            },
                         imageVector = Icons.Outlined.Close,
                         contentDescription = "Close Icon"
                     )
@@ -188,7 +199,7 @@ fun SearchSection(homeViewModel: HomeViewModel) {
             Icon(
                 modifier = Modifier
                     .animateContentSize()
-                    .padding(horizontal = 10.dp)
+                    .padding(start = 10.dp, end = 10.dp, top = 20.dp)
                     .size(35.dp),
                 painter = painterResource(id = R.drawable.chat_plus),
                 contentDescription = "Chat Icon",
@@ -202,24 +213,16 @@ fun SearchSection(homeViewModel: HomeViewModel) {
 
 @Composable
 fun PostsSections(
-    posts: List<PostUiState>,
     navController: NavController,
     homeViewModel: HomeViewModel
 ) {
-    val state = rememberLazyListState()
 
-    Column {
-        LazyColumn(
-            state = state, modifier = Modifier
-
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            items(posts.size) {
-
-                PostCard(postCardUiState = posts[it], navController, homeViewModel = homeViewModel)
-            }
+    LazyColumn(
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 55.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(homeViewModel.postsUiState.posts, key = { it.id }) { post ->
+            PostCard(postCardUiState = post, navController, homeViewModel = homeViewModel)
         }
     }
-
 }

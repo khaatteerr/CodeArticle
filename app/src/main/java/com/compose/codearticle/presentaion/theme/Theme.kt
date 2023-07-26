@@ -25,13 +25,13 @@ import com.compose.codearticle.presentaion.screens.settingScreen.SettingScreenVi
 import com.compose.codearticle.presentaion.screens.settingScreen.darkMode.ThemeViewModel
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color.Black,
+    primary = Color(0xFF101010),
     secondary = SecondaryColor,
     tertiary = ThirdColor,
     onPrimary = Orange,
     onBackground = White0_7,
-    background = Color.Black,
-    surface = MainColor,
+    background = Color(0xFF101010),
+    surface = Color(0xFF101010),
     onSurface = Color.White,
     outline = LightGray0_2,
     inversePrimary = LightGray,
@@ -52,33 +52,28 @@ private val LightColorScheme = lightColorScheme(
     inversePrimary = Color.Black,
     outline = DarkGray0_2,
 
-)
+    )
 
 @Composable
 fun CodeArticleTheme(
-    themeViewModel: ThemeViewModel = hiltViewModel(),
-    dynamicColor: Boolean = true,
+   // themeViewModel: ThemeViewModel = hiltViewModel(),
     content: @Composable () -> Unit
 ) {
 
-    val themeState by themeViewModel.themeState.collectAsState()
+  //  val themeState by themeViewModel.themeState.collectAsState()
 
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (themeState.isDarkMode) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        themeState.isDarkMode -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = DarkColorScheme
+//    when {
+//        themeState.isDarkMode -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
 
-        }
+            window.statusBarColor = Color.Transparent.toArgb()
+         }
     }
 
     MaterialTheme(

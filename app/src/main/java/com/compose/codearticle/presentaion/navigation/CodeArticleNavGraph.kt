@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.compose.codearticle.presentaion.screens.homeScreen.homeScreenRoute
+import com.compose.codearticle.presentaion.screens.profileScreen.profileScreenRoute
 import com.compose.codearticle.presentaion.screens.publishScreen.postScreenRoute
 import com.compose.codearticle.presentaion.screens.settingScreen.changePassword.changePasswordScreenRoute
 import com.compose.codearticle.presentaion.screens.settingScreen.privacy.privacyScreenRoute
@@ -23,9 +24,12 @@ fun CodeArticleNavGraph(navController: NavHostController) {
 
         // Setting Screen Navigation
         updateDataScreenRoute(navController = navController)
-        changePasswordScreenRoute(navController= navController)
+        changePasswordScreenRoute(navController = navController)
         rateUsScreenRoute(navController = navController)
         termsScreenRoute(navController = navController)
         privacyScreenRoute(navController = navController)
+
+        //profile Screen
+        profileScreenRoute(navController = navController)
     }
 }

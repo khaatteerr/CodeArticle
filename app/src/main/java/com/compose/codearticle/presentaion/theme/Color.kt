@@ -36,7 +36,7 @@ val LightGray = Color(0xFFCCCCCC)
 
 
 //Alpha Colors
-val White0_7  = Color(0xFFFFFFFF)
+val White0_7  = Color(0xFFF4F5F7)
 val Orange0_7 = Color(0xFFFDBE3B).copy(alpha = 0.7f)
 val LightGray0_2 = Color(0xFFCCCCCC).copy(0.2f)
 val DarkGray0_2 = Color(0xFF3A3A3A).copy(0.2f)

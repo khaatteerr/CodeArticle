@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
 
 @Composable
 fun PostCardDropdownMenu(
@@ -20,8 +19,6 @@ fun PostCardDropdownMenu(
     DropdownMenu(
         expanded = onExpand,
         onDismissRequest = { onDismiss() },
-
-        offset = DpOffset(x = (-60).dp, y = (-10).dp),
         modifier = Modifier.background(MaterialTheme.colorScheme.secondary)
     ) {
         DropdownMenuItem(
