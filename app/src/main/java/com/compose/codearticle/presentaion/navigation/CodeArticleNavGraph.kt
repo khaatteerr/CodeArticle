@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.compose.codearticle.presentaion.screens.homeScreen.homeScreenRoute
+import com.compose.codearticle.presentaion.screens.loginScreen.loginScreenRoute
 import com.compose.codearticle.presentaion.screens.profileScreen.profileScreenRoute
 import com.compose.codearticle.presentaion.screens.publishScreen.postScreenRoute
+import com.compose.codearticle.presentaion.screens.registerScreen.registerScreenRoute
 import com.compose.codearticle.presentaion.screens.settingScreen.changePassword.changePasswordScreenRoute
 import com.compose.codearticle.presentaion.screens.settingScreen.privacy.privacyScreenRoute
 import com.compose.codearticle.presentaion.screens.settingScreen.rateUs.rateUsScreenRoute
@@ -16,7 +18,7 @@ import com.compose.codearticle.presentaion.screens.settingScreen.updateData.upda
 @Composable
 fun CodeArticleNavGraph(navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         // Main Screens - Bottom bar Screens
         homeScreenRoute(navController = navController)
         postScreenRoute(navController = navController)
@@ -31,5 +33,11 @@ fun CodeArticleNavGraph(navController: NavHostController) {
 
         //profile Screen
         profileScreenRoute(navController = navController)
+
+        //Login Screen
+        loginScreenRoute(navController = navController)
+
+        //Register Screen
+        registerScreenRoute(navController = navController)
     }
 }

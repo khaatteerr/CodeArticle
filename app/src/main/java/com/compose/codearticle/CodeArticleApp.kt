@@ -30,12 +30,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.compose.codearticle.presentaion.navigation.CodeArticleNavGraph
 import com.compose.codearticle.presentaion.navigation.NavigationBarItems
 import com.compose.codearticle.presentaion.navigation.Screen
+import com.compose.codearticle.presentaion.screens.homeScreen.HomeViewModel
+import com.compose.codearticle.presentaion.screens.homeScreen.SearchSection
 import com.compose.codearticle.presentaion.theme.CodeArticleTheme
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Straight
@@ -55,21 +58,22 @@ fun CodeArticleApp() {
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
 
+
     CodeArticleTheme {
         Scaffold(modifier = Modifier
             .background(MaterialTheme.colorScheme.primary),
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.primary,
+         //   topBar = { SearchSection()},
             bottomBar = {
                 AnimatedVisibility(visible = isBottomBarVisible(backStackEntry),
                     enter = slideInVertically { it },
                     exit = slideOutVertically { it }) {
 
                     AnimatedNavigationBar(
-
-                            Modifier.height(55.dp),
+                        Modifier.height(55.dp),
                         selectedIndex = selectedIndex,
-                            ballAnimation = Straight(tween(300)),
+                        ballAnimation = Straight(tween(300)),
                         indentAnimation = Height(tween(300)),
                         ballColor = Color.White,
                         barColor = MaterialTheme.colorScheme.primary
@@ -136,7 +140,8 @@ fun isBottomBarVisible(backStackEntry: State<NavBackStackEntry?>): Boolean {
         Screen.ChangePasswordScreen.route,
         Screen.RateUsScreen.route,
         Screen.TermsScreen.route,
-        Screen.PrivacyScreen.route
+        Screen.PrivacyScreen.route,
+        Screen.LoginScreen.route
 
     ).any { it == backStackEntry.value?.destination?.route }.not()
 }

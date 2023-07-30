@@ -23,10 +23,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.compose.codearticle.R
 import com.compose.codearticle.presentaion.screens.homeScreen.HomeViewModel
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostUiState
@@ -69,8 +72,10 @@ fun PostCard(
                         .size(40.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop,
-                    placeholder = painterResource(R.drawable.baseline_crop_landscape_24),
-                    error = painterResource(id = R.drawable.baseline_crop_landscape_24),
+                    fallback = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                    placeholder = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                    error = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                    filterQuality = FilterQuality.Low
                 )
                 Text(
                     text = postCardUiState.postedBy?.username!!,
@@ -127,7 +132,7 @@ fun PostCard(
                         .padding(vertical = 10.dp)
                 )
                 val context = LocalContext.current
-                val density = remember {
+                val density = rememberSaveable  {
                     context.resources.displayMetrics.density
                 }
 
@@ -147,11 +152,11 @@ fun PostCard(
                         ),
                     contentScale = ContentScale.Crop,
 
-                    fallback = painterResource(R.drawable.baseline_crop_landscape_24),
-                    placeholder = painterResource(R.drawable.baseline_crop_landscape_24),
-                    error = painterResource(id = R.drawable.baseline_crop_landscape_24),
-                    alignment = Alignment.Center
-
+                    fallback = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                    placeholder = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                    error = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                    alignment = Alignment.Center,
+                    filterQuality = FilterQuality.Low
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -228,9 +233,6 @@ fun PostCard(
                 )
 
             }
-
-
-
 
         }
 

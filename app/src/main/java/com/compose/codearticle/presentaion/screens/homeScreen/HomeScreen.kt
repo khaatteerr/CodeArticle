@@ -1,5 +1,6 @@
 package com.compose.codearticle.presentaion.screens.homeScreen
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
@@ -27,55 +29,91 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.compose.codearticle.R
+import com.compose.codearticle.presentaion.navigation.CodeArticleNavGraph
+import com.compose.codearticle.presentaion.screens.homeScreen.composables.BeerItem
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.PostCard
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
+import kotlin.math.roundToInt
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel()) {
     HomeContent(navController, homeViewModel)
 }
 
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
+    val toolbarHeight = 60.dp
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
+    val toolbarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
 
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
 
-    Column(
+                val delta = available.y
+                val newOffset = toolbarOffsetHeightPx.value + delta
+                toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
+                return Offset.Zero
+            }
+        }
+    }
+    Scaffold(
         Modifier
+            .nestedScroll(nestedScrollConnection)
             .fillMaxSize()
             .padding(top = 25.dp)
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        SearchSection(homeViewModel)
+            .background(MaterialTheme.colorScheme.background),
+        topBar = {
+            SearchSection(modifier = Modifier
 
-        PostsSections(
-            navController, homeViewModel
-        )
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) })
+        }) {
+        PostsSections(navController = navController, homeViewModel = homeViewModel)
     }
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchSection(homeViewModel: HomeViewModel) {
+fun SearchSection(homeViewModel: HomeViewModel = hiltViewModel(),modifier: Modifier = Modifier) {
 
 
     val configuration = LocalConfiguration.current
@@ -95,8 +133,9 @@ fun SearchSection(homeViewModel: HomeViewModel) {
 
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
+            .animateContentSize()
             .background(MaterialTheme.colorScheme.primary),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -114,8 +153,11 @@ fun SearchSection(homeViewModel: HomeViewModel) {
                 contentDescription = "Profile Image",
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,
-                placeholder = painterResource(R.drawable.baseline_crop_landscape_24),
-                error = painterResource(id = R.drawable.baseline_crop_landscape_24),
+                fallback = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                placeholder = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                error = rememberAsyncImagePainter(model = "https://i.redd.it/vr2o7iiob5k91.jpg"),
+                filterQuality = FilterQuality.Low
+
             )
         }
 
@@ -145,7 +187,6 @@ fun SearchSection(homeViewModel: HomeViewModel) {
             },
             leadingIcon = {
                 Icon(
-
                     imageVector = Icons.Outlined.Search,
                     contentDescription = "Search Icon",
                     tint = MaterialTheme.colorScheme.onBackground
@@ -218,10 +259,12 @@ fun PostsSections(
 ) {
 
     LazyColumn(
-        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 55.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 55.dp, top = 70.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+
+        ) {
         items(homeViewModel.postsUiState.posts, key = { it.id }) { post ->
+
             PostCard(postCardUiState = post, navController, homeViewModel = homeViewModel)
         }
     }
