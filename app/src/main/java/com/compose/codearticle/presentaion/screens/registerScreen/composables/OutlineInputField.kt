@@ -10,16 +10,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,7 +33,7 @@ import com.compose.codearticle.presentaion.theme.BottomBarIcon
 import com.compose.codearticle.presentaion.theme.Orange
 import com.compose.codearticle.presentaion.theme.Ubuntu
 
-@Composable
+ @Composable
 fun OutlineInputField(
     text: String,
     hint: String,
@@ -38,23 +42,24 @@ fun OutlineInputField(
     error: String? = null,
     isErrorVisible: Boolean = false,
     onValueChange: (String) -> Unit,
-    keyboardType: KeyboardType
+ //   keyboardType: KeyboardType
 ) {
     Column {
         TextField(
             value = text,
             onValueChange = onValueChange,
+       //     keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+
             modifier = modifier.border(
                 0.3.dp,
-                Color.White.copy(alpha = 0.5f),
-                if (hint == "username") RoundedCornerShape(
-                    topEnd = 10.dp,
-                    topStart = 10.dp
-                ) else RoundedCornerShape(bottomEnd = 10.dp, bottomStart = 10.dp)
+                 White.copy(alpha = 0.5f),
+                if (hint == "Email") RoundedCornerShape(
+                    topEnd = 15.dp,
+                    topStart = 15.dp
+                ) else RoundedCornerShape(bottomEnd = 15.dp, bottomStart = 15.dp)
             ),
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            placeholder = {
+             placeholder = {
                 Text(hint, color = BottomBarIcon)
             },
             leadingIcon = {
@@ -64,15 +69,17 @@ fun OutlineInputField(
                     tint = BottomBarIcon
                 )
             },
-            shape = if (hint == "username") RoundedCornerShape(
-                topEnd = 10.dp,
-                topStart = 10.dp
-            ) else RoundedCornerShape(bottomEnd = 10.dp, bottomStart = 10.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = Color.White.copy(alpha = 0.15f),
-                unfocusedContainerColor = Color.White.copy(alpha = 0.15f),
-                focusedBorderColor = Transparent,
-                unfocusedBorderColor = Transparent
+            shape = if (hint == "Email") RoundedCornerShape(
+                topEnd = 15.dp,
+                topStart = 15.dp
+            ) else RoundedCornerShape(bottomEnd = 15.dp, bottomStart = 15.dp),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor =  White.copy(alpha = 0.15f),
+                unfocusedContainerColor =  White.copy(alpha = 0.15f),
+                focusedIndicatorColor = Transparent,
+                disabledIndicatorColor = Transparent,
+                unfocusedIndicatorColor = Transparent,
+                cursorColor = White
             ),
         )
         AnimatedVisibility(isErrorVisible) {

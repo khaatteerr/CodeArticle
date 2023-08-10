@@ -1,6 +1,7 @@
 package com.compose.codearticle.data.di.modules
 
 import android.content.SharedPreferences
+import com.compose.codearticle.data.source.remote.endPoints.UserApiService
 import com.compose.codearticle.data.utilities.Constants.BASE_HTTP_URL
 import com.compose.codearticle.data.utilities.Constants.USER_TOKEN_SHARED_PREFERENCES_KEY
 import dagger.Module
@@ -16,6 +17,7 @@ import io.ktor.client.features.websocket.WebSockets
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -32,7 +34,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_HTTP_URL)
             .client(okHttpClient)
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
@@ -41,6 +43,13 @@ class NetworkModule {
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     }
+
+    @Singleton
+    @Provides
+    fun provideUserApiService(retrofit: Retrofit): UserApiService {
+        return retrofit.create(UserApiService::class.java)
+    }
+
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -62,7 +71,7 @@ class NetworkModule {
             .connectTimeout(120, TimeUnit.SECONDS)
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
-            .build();
+            .build()
     }
 
     @Provides

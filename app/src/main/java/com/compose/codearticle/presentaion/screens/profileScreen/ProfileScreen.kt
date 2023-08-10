@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.compose.codearticle.presentaion.navigation.Screen
 import com.compose.codearticle.presentaion.screens.homeScreen.HomeScreen
+import com.compose.codearticle.presentaion.screens.myArticles.MyArticles
 import com.compose.codearticle.presentaion.screens.profileScreen.composables.TabItem
 import com.compose.codearticle.presentaion.screens.settingScreen.SettingScreen
 import com.compose.codearticle.presentaion.screens.settingScreen.changePassword.ChangePasswordScreen
@@ -183,10 +184,10 @@ fun UploadedPostsSection(navController: NavController) {
 
         val tabs = listOf(
             TabItem(
-                title = "Account",
+                title = "Articles",
                 icon = Icons.Filled.Favorite,
                 screen = {
-                    UpdateDataScreen(navController = navController)
+                    MyArticles(navController = navController)
                 }
             ),
             TabItem(

@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,14 +33,17 @@ fun LoadingButton(
 
     Button(
         onClick = onClick,
-        modifier = modifier.background(brush),
-        shape = RoundedCornerShape(5.dp),
+        modifier = modifier.background(brush ,RoundedCornerShape(10.dp) ),
+        shape = RoundedCornerShape(10.dp),
         enabled = isEnabled,
-
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = Color.Transparent
+        )
     ) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.size(20.dp))
         } else
-            Text(text = "Continue", fontSize = 13.sp)
+            Text(text = "Continue", fontSize = 13.sp , color = Color.White)
     }
 }

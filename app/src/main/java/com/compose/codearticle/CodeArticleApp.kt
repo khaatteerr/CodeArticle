@@ -135,14 +135,19 @@ fun isBottomBarVisible(backStackEntry: State<NavBackStackEntry?>): Boolean {
 
         //Add Any screen that you need to hide bottom Navigation on it
 
-        Screen.PostScreen.route,
-        Screen.UpdateDataScreen.route,
-        Screen.ChangePasswordScreen.route,
-        Screen.RateUsScreen.route,
-        Screen.TermsScreen.route,
-        Screen.PrivacyScreen.route,
-        Screen.LoginScreen.route
+//        Screen.PostScreen.route,
+//        Screen.UpdateDataScreen.route,
+//        Screen.ChangePasswordScreen.route,
+//        Screen.RateUsScreen.route,
+//        Screen.TermsScreen.route,
+//        Screen.PrivacyScreen.route,
+//        Screen.LoginScreen.route,
+//
+        //Screen that bottom nav is visible
 
-    ).any { it == backStackEntry.value?.destination?.route }.not()
+        Screen.HomeScreen.route,
+        Screen.ProfileScreen.route
+
+    ).any { it == backStackEntry.value?.destination?.route }
 }
 
