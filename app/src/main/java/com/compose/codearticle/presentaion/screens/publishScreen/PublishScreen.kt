@@ -321,11 +321,11 @@ fun IsDialogShown(postArticleViewModel: PostArticleViewModel, navController: Nav
                 { navController.popBackStack() })
         }
     }
-    BackHandler {
-        if (postArticleViewModel.postScreenState.postDescription.text.isNotBlank() || postArticleViewModel.postScreenState.isImageVisible)
-            postArticleViewModel.onEvent(PublishPostUiEvent.CancelPost) else
-            navController.popBackStack()
-    }
+//    BackHandler {
+//        if (postArticleViewModel.postScreenState.postDescription.text.isNotBlank() || postArticleViewModel.postScreenState.isImageVisible)
+//            postArticleViewModel.onEvent(PublishPostUiEvent.CancelPost) else
+//            navController.popBackStack()
+//    }
 }
 
 fun isPostEnable(postArticleViewModel: PostArticleViewModel) {

@@ -64,8 +64,7 @@ fun CodeArticleApp() {
             .background(MaterialTheme.colorScheme.primary),
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.primary,
-         //   topBar = { SearchSection()},
-            bottomBar = {
+             bottomBar = {
                 AnimatedVisibility(visible = isBottomBarVisible(backStackEntry),
                     enter = slideInVertically { it },
                     exit = slideOutVertically { it }) {
