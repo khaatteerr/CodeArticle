@@ -7,6 +7,6 @@ import com.compose.codearticle.presentaion.navigation.Screen
 
 fun NavGraphBuilder.registerScreenRoute(navController: NavController){
     composable(Screen.RegisterScreen.route){
-        RegisterScreen(navController = navController)
+        RegisterScreen(navController = navController){}
     }
 }

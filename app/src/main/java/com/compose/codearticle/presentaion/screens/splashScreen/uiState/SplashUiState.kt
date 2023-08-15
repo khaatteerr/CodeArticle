@@ -4,5 +4,5 @@ import com.compose.codearticle.presentaion.navigation.Screen
 
 sealed class SplashUiEvent(var screen: Screen){
     object HomeScreen:SplashUiEvent(Screen.HomeScreen)
-    object LoginScreen:SplashUiEvent(Screen.LoginScreen)
+     object AuthorizationScreen:SplashUiEvent(Screen.AuthorizationScreen)
 }

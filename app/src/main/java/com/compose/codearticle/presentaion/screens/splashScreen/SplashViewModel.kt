@@ -18,7 +18,7 @@ class SplashViewModel @Inject constructor(isUserSplashUseCase: IsUserSplashUseCa
     init {
         viewModelScope.launch {
             val isSplash = isUserSplashUseCase()
-            _eventFlow.emit(if(isSplash) SplashUiEvent.LoginScreen else SplashUiEvent.HomeScreen)
+            _eventFlow.emit(if(isSplash) SplashUiEvent.AuthorizationScreen else SplashUiEvent.HomeScreen)
         }
     }
 }

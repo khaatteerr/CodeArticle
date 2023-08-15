@@ -28,8 +28,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun register(
-        name: String,
-        userName: String,
+         userName: String,
         email: String,
         password: String,
         passwordConfirmation: String
@@ -37,7 +36,7 @@ class UserRepositoryImpl @Inject constructor(
         return externalScope.async {
             userRemoteDataSource.register(
                 RegisterRequestModel(
-                    name = name,
+
                     username = userName,
                     email = email,
                     password = password,

@@ -7,6 +7,6 @@ import com.compose.codearticle.presentaion.navigation.Screen
 
 fun NavGraphBuilder.loginScreenRoute(navController: NavController){
     composable(Screen.LoginScreen.route){
-        LoginInScreen(navController = navController)
+        LoginInScreen(navController = navController){}
     }
 }

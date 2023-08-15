@@ -24,7 +24,7 @@ fun GridArticleCard(myArticleUiState: MyArticleUiState) {
             .clip(RoundedCornerShape(10.dp))
             .height(myArticleUiState.height.dp)
             .background(
-                Color.Red
+                Color.Gray
             ),
         contentScale = ContentScale.Crop
     )

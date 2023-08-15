@@ -147,6 +147,10 @@ dependencies {
     implementation "com.airbnb.android:lottie-compose:6.0.1"
 
 
+    
+    implementation "com.github.skydoves:orbitary:0.1.0"
+
+
     // shared element
    // implementation("com.mxalbert.sharedelements:shared-elements:0.1.0-SNAPSHOT")
 

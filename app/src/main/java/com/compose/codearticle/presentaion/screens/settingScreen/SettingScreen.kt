@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
@@ -65,7 +66,7 @@ fun SettingContent(navController: NavController, settingScreenViewModel: Setting
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(start = 20.dp, end = 20.dp, top = 30.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 50.dp)
     ) {
         UserProfileSection(navController)
         AccountAndSecuritySection(settingScreenViewModel, navController)
@@ -88,10 +89,10 @@ fun UserProfileSection(navController: NavController) {
                 }
         ) {
             Icon(
-                imageVector = Icons.Default.KeyboardArrowLeft,
+                imageVector = Icons.Default.ArrowBackIos,
                 contentDescription = "Back to home",
                 tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(vertical = 10.dp)
+                modifier = Modifier.padding(vertical = 10.dp).size(20.dp)
             )
 
             Text(
@@ -106,7 +107,6 @@ fun UserProfileSection(navController: NavController) {
         Card(
             elevation = CardDefaults.cardElevation(1.dp),
             modifier = Modifier
-
                 .padding(top = 30.dp)
                 .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
                 .height(80.dp),
@@ -119,7 +119,6 @@ fun UserProfileSection(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxSize()
-
                     .padding(horizontal = 5.dp)
             ) {
                 Image(
@@ -150,7 +149,8 @@ fun UserProfileSection(navController: NavController) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowRight,
                     contentDescription = "Go specific Setting",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
 

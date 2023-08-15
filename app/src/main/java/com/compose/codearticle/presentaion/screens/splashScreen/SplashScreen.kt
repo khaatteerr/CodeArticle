@@ -3,11 +3,14 @@ package com.compose.codearticle.presentaion.screens.splashScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.compose.codearticle.R
@@ -25,16 +28,18 @@ fun SplashScreen(
                 SplashUiEvent.HomeScreen -> navController.navigate(event.screen.route){
                     popUpTo(0)
                 }
-                SplashUiEvent.LoginScreen -> navController.navigate(event.screen.route){
+                SplashUiEvent.AuthorizationScreen -> navController.navigate(event.screen.route){
                     popUpTo(0)
                 }
-            }
+
+             }
         }
     }
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Image(
-            painter = painterResource(id = R.drawable.back),
-            contentDescription = null
+            painter = painterResource(id = R.drawable.logo_nobackground),
+            contentDescription = null,
+            contentScale = ContentScale.Crop, modifier = Modifier.size(200.dp)
         )
     }
 }

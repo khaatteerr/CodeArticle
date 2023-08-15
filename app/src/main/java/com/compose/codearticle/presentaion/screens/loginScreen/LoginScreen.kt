@@ -2,41 +2,33 @@ package com.compose.codearticle.presentaion.screens.loginScreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.compose.codearticle.presentaion.navigation.Screen
 import com.compose.codearticle.presentaion.screens.loginScreen.uiStates.LoginUiEvent
 import com.compose.codearticle.presentaion.screens.registerScreen.composables.LoadingButton
@@ -50,13 +42,11 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun LoginInScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
+    goToRegister:()->Unit
 ) {
 
-    val composition by rememberLottieComposition(
-        spec = LottieCompositionSpec.Url("https://assets4.lottiefiles.com/packages/lf20_4yabI8pgm7.json")
-    )
-     val snackBarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -76,23 +66,18 @@ fun LoginInScreen(
         }
     }
     Scaffold(
-        modifier = Modifier.background(Black),
+        modifier = Modifier,
+        containerColor = Transparent,
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) {
         Box(
             Modifier
                 .fillMaxSize()
-                .background(Black)
+                .background(Transparent)
         ) {
-
-            LottieAnimation(
-                composition = composition,
-                contentScale = ContentScale.Crop,
-                iterations = LottieConstants.IterateForever
-            )
-
             Column(
-                Modifier.padding(start = 30.dp, end = 30.dp, top = 100.dp),
+                Modifier
+                    .padding(start = 30.dp, end = 30.dp, top = 100.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -101,15 +86,19 @@ fun LoginInScreen(
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     letterSpacing = 2.sp,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                     textAlign = TextAlign.Start
                 )
                 Text(
                     text = "Welcome back you've been missed!",
-                    fontSize = 12.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Thin,
                     color = Color.White,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 30.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 30.dp),
                     textAlign = TextAlign.Start
 
                 )
@@ -118,17 +107,17 @@ fun LoginInScreen(
                     hint = "Email",
                     modifier = Modifier.fillMaxWidth(),
                     onValueChange = { viewModel.onEvent(LoginUiEvent.EmailChanged(it)) },
-                     isErrorVisible = viewModel.loginUiState.emailUiState.errorMessage != null,
+                    isErrorVisible = viewModel.loginUiState.emailUiState.errorMessage != null,
                     error = viewModel.loginUiState.emailUiState.errorMessage
                 )
 
                 OutlineInputField(
                     text = viewModel.loginUiState.passwordUiState.text,
-                    hint = "Password",
+                    hint = "password",
                     modifier = Modifier.fillMaxWidth(),
                     icon = Icons.Default.Password,
                     onValueChange = { viewModel.onEvent(LoginUiEvent.PasswordChanged(it)) },
-                     isErrorVisible = viewModel.loginUiState.passwordUiState.errorMessage != null,
+                    isErrorVisible = viewModel.loginUiState.passwordUiState.errorMessage != null,
                     error = viewModel.loginUiState.passwordUiState.errorMessage
                 )
                 LoadingButton(
@@ -146,16 +135,19 @@ fun LoginInScreen(
                         .fillMaxWidth()
                         .padding(top = 20.dp)
                         .noRippleClickable {
-                            navController.navigate(Screen.RegisterScreen.route)
+                            //   navController.navigate(Screen.RegisterScreen.route)
+                            goToRegister()
                         },
                     fontFamily = Ubuntu,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 13.sp,
+                    fontSize = 15.sp,
                     color = Color.White,
                     textAlign = TextAlign.Start
                 )
             }
+
         }
     }
-
 }
+
+

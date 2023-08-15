@@ -5,8 +5,6 @@ import com.squareup.moshi.Json
 import kotlinx.serialization.Serializable
 
 data class RegisterRequestModel(
-    @SerializedName("name")
-    val name: String,
     @SerializedName("username")
     val username: String,
     @SerializedName("email")

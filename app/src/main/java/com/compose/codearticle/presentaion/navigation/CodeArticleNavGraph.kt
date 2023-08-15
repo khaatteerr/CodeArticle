@@ -3,6 +3,7 @@ package com.compose.codearticle.presentaion.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.compose.codearticle.presentaion.screens.authorization.authorizationScreenRoute
 import com.compose.codearticle.presentaion.screens.homeScreen.homeScreenRoute
 import com.compose.codearticle.presentaion.screens.loginScreen.loginScreenRoute
 import com.compose.codearticle.presentaion.screens.myArticles.myArticlesRoute
@@ -20,7 +21,7 @@ import com.compose.codearticle.presentaion.screens.splashScreen.splashScreenRout
 @Composable
 fun CodeArticleNavGraph(navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
 
         //Splash screen
         splashScreenRoute(navController = navController)
@@ -39,6 +40,8 @@ fun CodeArticleNavGraph(navController: NavHostController) {
         //profile Screen
         profileScreenRoute(navController = navController)
 
+        //auth screen
+        authorizationScreenRoute(navController = navController)
         //Login Screen
         loginScreenRoute(navController = navController)
 

@@ -3,6 +3,7 @@ package com.compose.codearticle.presentaion.navigation
 sealed class Screen(val route: String) {
 
     object SplashScreen:Screen("SplashScreen")
+    object AuthorizationScreen:Screen("AuthorizationScreen")
     object LoginScreen : Screen("LoginScreen")
     object RegisterScreen : Screen("RegisterScreen")
 

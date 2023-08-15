@@ -56,7 +56,7 @@ class LoginViewModel @Inject constructor(
                 loginUiState = loginUiState.copy(isLoading = false)
             }   else {
                 try {
-                    val loginResult = loginUseCase(loginUiState.emailUiState.text, loginUiState.passwordUiState.text)
+                    var loginResult = loginUseCase(loginUiState.emailUiState.text, loginUiState.passwordUiState.text)
 
                     if (loginResult.token.isNotBlank())
                         _eventFlow.emit(UiEvent.LoginSuccess)
@@ -73,6 +73,10 @@ class LoginViewModel @Inject constructor(
                         ),
                     )
                     loginUiState = loginUiState.copy(isLoading = false)
+                }catch (e: Exception) {
+                    e.printStackTrace()
+                    loginUiState = loginUiState.copy(isLoading = false)
+                    _eventFlow.emit(UiEvent.ShowMessage(e.message.toString()))
                 }
             }
 
