@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class BaseApiResponse<T>(var error: String?, var data: T?)
+class BaseApiResponse<T>(var error: String?, var posts: T?)
 
-data class ErrorMsg(
-    @SerializedName("error")
-    var error: String
-)
+

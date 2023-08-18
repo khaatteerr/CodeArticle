@@ -20,7 +20,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
@@ -38,8 +40,7 @@ import com.exyte.animatednavbar.utils.noRippleClickable
 import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
+ @Composable
 fun LoginInScreen(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel(),
@@ -123,6 +124,7 @@ fun LoginInScreen(
                 LoadingButton(
                     onClick = viewModel::login,
                     modifier = Modifier
+                        .shadow(24.dp ,spotColor= Red)
                         .padding(top = 30.dp)
                         .fillMaxWidth()
                         .height(50.dp),

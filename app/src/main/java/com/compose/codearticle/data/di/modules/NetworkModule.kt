@@ -1,6 +1,7 @@
 package com.compose.codearticle.data.di.modules
 
 import android.content.SharedPreferences
+import com.compose.codearticle.data.source.remote.endPoints.ArticlesApiService
 import com.compose.codearticle.data.source.remote.endPoints.UserApiService
 import com.compose.codearticle.data.utilities.Constants.BASE_HTTP_URL
 import com.compose.codearticle.data.utilities.Constants.USER_TOKEN_SHARED_PREFERENCES_KEY
@@ -48,6 +49,12 @@ class NetworkModule {
     @Provides
     fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideArticlesApiService(retrofit: Retrofit): ArticlesApiService {
+        return retrofit.create(ArticlesApiService::class.java)
     }
 
     @Provides

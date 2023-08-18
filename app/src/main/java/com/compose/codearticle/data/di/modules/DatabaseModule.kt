@@ -16,11 +16,42 @@ import javax.inject.Singleton
 class DatabaseModule {
     @Provides
     @Singleton
-    fun provideDataStoreUtil(@ApplicationContext context: Context): DataStoreUtil = DataStoreUtil(context)
+    fun provideDataStoreUtil(@ApplicationContext context: Context): DataStoreUtil =
+        DataStoreUtil(context)
 
     @Singleton
     @Provides
     fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences(USER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
     }
+
+//    @Singleton
+//    @Provides
+//    fun provideArticleDatabase(@ApplicationContext context: Context): ArticleDatabase {
+//        return Room.databaseBuilder(
+//            context,
+//            ArticleDatabase::class.java,
+//            "article.db"
+//        )
+//            .build()
+//    }
+//
+//    @OptIn(ExperimentalPagingApi::class)
+//    @Singleton
+//    @Provides
+//    fun provideArticlePager(
+//        articleDatabase: ArticleDatabase,
+//        articlesApiService: ArticlesApiService
+//    ): Pager<Int, ArticleEntity> {
+//        return Pager(
+//            config = PagingConfig(pageSize = 20),
+//            remoteMediator = ArticleRemoteMediator(
+//                articleDatabase = articleDatabase,
+//                articlesApiService = articlesApiService
+//            ),
+//            pagingSourceFactory = {
+//                articleDatabase.dao.pagingSource()
+//            }
+//        )
+//    }
 }

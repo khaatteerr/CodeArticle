@@ -5,10 +5,14 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.paging.compose.items
+
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
@@ -38,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +66,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.compose.codearticle.R
@@ -69,6 +77,7 @@ import com.compose.codearticle.presentaion.screens.homeScreen.composables.PostCa
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
 import kotlin.math.roundToInt
+import androidx.paging.compose.LazyPagingItems
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +122,7 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchSection(homeViewModel: HomeViewModel = hiltViewModel(),modifier: Modifier = Modifier) {
+fun SearchSection(homeViewModel: HomeViewModel = hiltViewModel(), modifier: Modifier = Modifier) {
 
 
     val configuration = LocalConfiguration.current
@@ -258,6 +267,44 @@ fun PostsSections(
     homeViewModel: HomeViewModel
 ) {
 
+//    val article = homeViewModel.articlePagingFlow.collectAsLazyPagingItems()
+//    val context = LocalContext.current
+//    LaunchedEffect(key1 = article.loadState) {
+//        if (article.loadState.refresh is LoadState.Error) {
+//            Toast.makeText(
+//                context,
+//                "Error: " + (article.loadState.refresh as LoadState.Error).error.message,
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
+//    }
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        if (article.loadState.refresh is LoadState.Loading) {
+//            CircularProgressIndicator(
+//                modifier = Modifier.align(Alignment.Center)
+//            )
+//        } else {
+//            LazyColumn(
+//                modifier = Modifier.fillMaxSize(),
+//                verticalArrangement = Arrangement.spacedBy(16.dp),
+//                horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//
+//                items(article) { article ->
+//                    AsyncImage(
+//                        model = article!!.attachment.image,
+//                        contentDescription = null,
+//                        modifier = Modifier.size(200.dp)
+//                    )
+//                }
+//                item {
+//                    if (article.loadState.append is LoadState.Loading) {
+//                        CircularProgressIndicator()
+//                    }
+//                }
+//            }
+//        }
+//    }
     LazyColumn(
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 55.dp, top = 70.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),

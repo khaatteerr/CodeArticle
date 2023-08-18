@@ -21,7 +21,7 @@ import com.compose.codearticle.presentaion.screens.splashScreen.splashScreenRout
 @Composable
 fun CodeArticleNavGraph(navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
 
         //Splash screen
         splashScreenRoute(navController = navController)

@@ -21,10 +21,10 @@ class UserRepositoryImpl @Inject constructor(
             userRemoteDataSource.login(LoginRequestModel(email, password))
                 .also {
                     if (it.isDataHasGotSuccessfully()) {
-                        userLocalDataSource.saveUserToken(it.body()!!.data!!.userToken)
+                        userLocalDataSource.saveUserToken(it.body()!!.posts!!.userToken)
                     } else throw Exception(it.body()!!.error)
                 }
-        }.await().body()!!.data!!.toUserModel()
+        }.await().body()!!.posts!!.toUserModel()
     }
 
     override suspend fun register(
@@ -45,10 +45,10 @@ class UserRepositoryImpl @Inject constructor(
             )
                 .also {
                     if (it.isDataHasGotSuccessfully()) {
-                        userLocalDataSource.saveUserToken(it.body()!!.data!!.userToken)
+                        userLocalDataSource.saveUserToken(it.body()!!.posts!!.userToken)
                     } else throw Exception(it.body()!!.error)
                 }
-        }.await().body()!!.data!!.toUserModel()
+        }.await().body()!!.posts!!.toUserModel()
     }
 
     override suspend fun getUserToken(): String? {
