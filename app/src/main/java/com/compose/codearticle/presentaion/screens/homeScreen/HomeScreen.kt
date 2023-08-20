@@ -5,14 +5,11 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.paging.compose.items
-
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,26 +24,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,21 +59,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.compose.codearticle.R
-import com.compose.codearticle.presentaion.navigation.CodeArticleNavGraph
-import com.compose.codearticle.presentaion.screens.homeScreen.composables.BeerItem
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.PostCard
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
 import com.compose.codearticle.presentaion.theme.Ubuntu
+import com.compose.codearticle.presentaion.utilities.ShimmerEffect
+import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.roundToInt
-import androidx.paging.compose.LazyPagingItems
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hiltViewModel()) {
     HomeContent(navController, homeViewModel)
 }
@@ -98,9 +87,20 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
 
                 val delta = available.y
-                val newOffset = toolbarOffsetHeightPx.value + delta
-                toolbarOffsetHeightPx.value = newOffset.coerceIn(-toolbarHeightPx, 0f)
+                val newOffset = toolbarOffsetHeightPx.floatValue + delta
+                toolbarOffsetHeightPx.floatValue = newOffset.coerceIn(-toolbarHeightPx, 0f)
                 return Offset.Zero
+            }
+        }
+    }
+
+    val snackBarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(key1 = true) {
+        homeViewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is HomeViewModel.UiEvent.ShowMessage -> snackBarHostState.showSnackbar(
+                    event.message
+                )
             }
         }
     }
@@ -108,12 +108,13 @@ fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
         Modifier
             .nestedScroll(nestedScrollConnection)
             .fillMaxSize()
-            .padding(top = 25.dp)
+            .padding(top = 25.dp, bottom = 55.dp)
             .background(MaterialTheme.colorScheme.background),
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         topBar = {
             SearchSection(modifier = Modifier
 
-                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt()) })
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.floatValue.roundToInt()) })
         }) {
         PostsSections(navController = navController, homeViewModel = homeViewModel)
     }
@@ -305,14 +306,35 @@ fun PostsSections(
 //            }
 //        }
 //    }
-    LazyColumn(
-        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, bottom = 55.dp, top = 70.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+    Box(modifier = Modifier.fillMaxSize()) {
 
-        ) {
-        items(homeViewModel.postsUiState.posts, key = { it.id }) { post ->
+        if (homeViewModel.postsUiState.isLoading) {
+            Column {
 
-            PostCard(postCardUiState = post, navController, homeViewModel = homeViewModel)
+                for (i in 1..3) {
+
+                    ShimmerEffect(modifier = Modifier.padding(top = if (i == 1) 70.dp else 10.dp))
+                }
+            }
+
+        } else {
+
+            LazyColumn(
+                contentPadding = PaddingValues(
+                    start = 20.dp,
+                    end = 20.dp,
+                    bottom = 55.dp,
+                    top = 70.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+
+                ) {
+                items(homeViewModel.postsUiState.posts, key = { it.id }) { post ->
+
+                    PostCard(postCardUiState = post, navController, homeViewModel = homeViewModel)
+
+                }
+            }
         }
     }
 }

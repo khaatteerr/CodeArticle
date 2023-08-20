@@ -13,6 +13,9 @@ import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostedBy
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostsUiState
 import com.compose.codearticle.presentaion.utilities.updateState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +34,8 @@ class HomeViewModel @Inject constructor(
 //        .cachedIn(viewModelScope)
 
     var postsUiState by mutableStateOf(PostsUiState(isLoading = true))
-
+    private var _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow: SharedFlow<UiEvent> = _eventFlow.asSharedFlow()
     private fun search() {
         if (postsUiState.textSearch.trim().isBlank())
             postsUiState = postsUiState.copy(searchResult = emptyList())
@@ -100,7 +104,10 @@ class HomeViewModel @Inject constructor(
                     postsUiState = postsUiState.copy(posts = newArticlesList, isLoading = false)
                 }
             } catch (e: Exception) {
-
+                _eventFlow.emit(UiEvent.ShowMessage(e.message.toString()))
+                postsUiState = postsUiState.copy(
+                    isLoading = false
+                )
             }
         }
 //        val oldList = listOf(
@@ -304,5 +311,8 @@ class HomeViewModel @Inject constructor(
             }
 
         }
+    }
+    sealed class UiEvent {
+        data class ShowMessage(var message: String) : UiEvent()
     }
 }
