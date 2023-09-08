@@ -147,8 +147,12 @@ dependencies {
     //Lottie
     implementation "com.airbnb.android:lottie-compose:6.0.1"
 
+    // palette color
+    implementation 'androidx.palette:palette-ktx:1.0.0'
 
-    
+
+
+
     implementation "com.github.skydoves:orbitary:0.1.0"
 
 

@@ -19,6 +19,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,6 +56,22 @@ fun PostCard(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface),
     ) {
+
+        var isLiked by rememberSaveable {
+            mutableStateOf(postCardUiState.isLiked)
+        }
+        var isDropDownMenuActive by rememberSaveable {
+            mutableStateOf(postCardUiState.isDropDownMenuActive)
+        }
+        var isSavedToLocal by rememberSaveable {
+            mutableStateOf(postCardUiState.isSavedToLocal)
+        }
+        var likes   by rememberSaveable {
+            mutableStateOf(postCardUiState.likes)
+        }
+
+
+
         Row(
             Modifier,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -93,8 +113,8 @@ fun PostCard(
                     .size(20.dp)
                     .clip(CircleShape)
                     .clickable {
-                        postCardUiState.changeDropDownMenuState.invoke()
-                    }, contentAlignment = Alignment.Center
+                        isDropDownMenuActive=!isDropDownMenuActive
+                     }, contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painterResource(id = R.drawable.baseline_more_horiz_24),
@@ -103,9 +123,9 @@ fun PostCard(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
 
-                if (postCardUiState.isDropDownMenuActive)
+                if (isDropDownMenuActive)
                     PostCardDropdownMenu(onExpand = true) {
-                        postCardUiState.changeDropDownMenuState.invoke()
+                        isDropDownMenuActive=!isDropDownMenuActive
                     }
 
             }
@@ -113,7 +133,7 @@ fun PostCard(
 
         }
 
-        Column() {
+        Column {
             ExpandableText(
                 text = postCardUiState.postDescription
             )
@@ -127,7 +147,7 @@ fun PostCard(
                 contentDescription = postCardUiState.media.postImage,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(finalHeight)
+                    .height(300.dp)
                     .bounceClick(0.98f) { }
                     .clip(RoundedCornerShape(10.dp))
                     .border(
@@ -148,16 +168,17 @@ fun PostCard(
                 modifier = Modifier.padding(vertical = 10.dp)
             ) {
                 Icon(
-                    if (postCardUiState.isLiked) painterResource(id = R.drawable.like_filled) else painterResource(
+                    if (isLiked) painterResource(id = R.drawable.like_filled) else painterResource(
                         id = R.drawable.like
                     ),
                     contentDescription = "favorite",
                     modifier = Modifier
                         .size(20.dp)
                         .bounceClick {
-                            postCardUiState.changeLikeState()
+                            isLiked =! isLiked
+                            likes = if (isLiked) likes!! + 1 else likes!! - 1
                         },
-                    tint = if (postCardUiState.isLiked) Color.Red else MaterialTheme.colorScheme.onBackground
+                    tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.onBackground
                 )
 
                 Icon(
@@ -174,14 +195,14 @@ fun PostCard(
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
-                    if (postCardUiState.isSavedToLocal) painterResource(id = R.drawable.bookmark_filled) else painterResource(
+                    if (isSavedToLocal) painterResource(id = R.drawable.bookmark_filled) else painterResource(
                         id = R.drawable.ic_bookmark
                     ),
                     contentDescription = "save",
                     modifier = Modifier
                         .size(24.dp)
-                        .bounceClick { postCardUiState.SaveToLocal.invoke() },
-                    tint = if (postCardUiState.isSavedToLocal) Orange else MaterialTheme.colorScheme.onBackground
+                        .bounceClick {  isSavedToLocal=!isSavedToLocal },
+                    tint = if ( isSavedToLocal) Orange else MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -194,14 +215,14 @@ fun PostCard(
             ) {
 
                 Text(
-                    text = "${postCardUiState.likes} likes",
+                    text = "$likes likes",
                     fontWeight = Light,
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.inversePrimary.copy(0.7f),
                     fontFamily = Ubuntu,
                 )
                 Text(
-                    text = "${postCardUiState.comments_count} comments",
+                    text = "${postCardUiState.commentsCount} comments",
                     fontWeight = Light,
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.inversePrimary.copy(0.7f),

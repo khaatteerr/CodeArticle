@@ -3,6 +3,12 @@
 package com.compose.codearticle.presentaion.screens.profileScreen
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -16,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.TabRow
 import androidx.compose.material.icons.Icons
@@ -29,6 +36,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -50,6 +58,7 @@ import coil.compose.AsyncImage
 import com.compose.codearticle.R
 import com.compose.codearticle.presentaion.navigation.Screen
 import com.compose.codearticle.presentaion.screens.myArticles.MyArticles
+import com.compose.codearticle.presentaion.theme.Orange
 import com.compose.codearticle.presentaion.theme.Ubuntu
 import com.compose.codearticle.presentaion.utilities.NoRippleInteractionSource
 import com.exyte.animatednavbar.utils.noRippleClickable
@@ -144,19 +153,27 @@ fun ProfileContent(navController: NavController) {
                     val pagerState =
                         rememberPagerState(initialPage = 0)
                     val coroutineScope = rememberCoroutineScope()
+                    val infiniteTransition = rememberInfiniteTransition(label = "change color")
 
+                    val color by infiniteTransition.animateColor(
+                        initialValue = Color.Cyan,
+                        targetValue = Orange ,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(3000, easing = LinearEasing),
+                            repeatMode = RepeatMode.Reverse
+                        ),label = "indicator color"
+                    )
                     TabRow(
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colorScheme.background,
                         contentColor = Color.Black,
                         selectedTabIndex = pagerState.currentPage,
-                        // Override the indicator, using the provided pagerTabIndicatorOffset modifier
-                        indicator = { tabPositions ->
+                         indicator = { tabPositions ->
                             TabRowDefaults.Indicator(
                                 Modifier
                                     .pagerTabIndicatorOffset(pagerState, tabPositions)
-                                    .padding(horizontal = 40.dp),
-                                color = MaterialTheme.colorScheme.tertiary
+                                    .padding(horizontal = 40.dp).clip(RoundedCornerShape(10.dp)),
+                                color = color
                             )
                         }
                     ) {

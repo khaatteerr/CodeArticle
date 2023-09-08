@@ -1,6 +1,7 @@
 package com.compose.codearticle.presentaion.screens.homeScreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -21,10 +22,15 @@ import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarData
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,11 +42,14 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,17 +64,29 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.compose.codearticle.R
+import com.compose.codearticle.presentaion.navigation.Screen
+import com.compose.codearticle.presentaion.screens.homeScreen.composables.Post
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.PostCard
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.HomeUiEvent
+import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostUiState
+import com.compose.codearticle.presentaion.theme.MainColor
 import com.compose.codearticle.presentaion.theme.Ubuntu
+import com.compose.codearticle.presentaion.theme.cardColor
 import com.compose.codearticle.presentaion.utilities.ShimmerEffect
+import com.exyte.animatednavbar.utils.noRippleClickable
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.roundToInt
 
@@ -78,46 +99,8 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeViewModel = hilt
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeContent(navController: NavController, homeViewModel: HomeViewModel) {
-    val toolbarHeight = 60.dp
-    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
-    val toolbarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
 
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-
-                val delta = available.y
-                val newOffset = toolbarOffsetHeightPx.floatValue + delta
-                toolbarOffsetHeightPx.floatValue = newOffset.coerceIn(-toolbarHeightPx, 0f)
-                return Offset.Zero
-            }
-        }
-    }
-
-    val snackBarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(key1 = true) {
-        homeViewModel.eventFlow.collectLatest { event ->
-            when (event) {
-                is HomeViewModel.UiEvent.ShowMessage -> snackBarHostState.showSnackbar(
-                    event.message
-                )
-            }
-        }
-    }
-    Scaffold(
-        Modifier
-            .nestedScroll(nestedScrollConnection)
-            .fillMaxSize()
-            .padding(top = 25.dp, bottom = 55.dp)
-            .background(MaterialTheme.colorScheme.background),
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
-        topBar = {
-            SearchSection(modifier = Modifier
-
-                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.floatValue.roundToInt()) })
-        }) {
-        PostsSections(navController = navController, homeViewModel = homeViewModel)
-    }
+    PostsSections(navController = navController, homeViewModel = homeViewModel)
 
 }
 
@@ -146,7 +129,7 @@ fun SearchSection(homeViewModel: HomeViewModel = hiltViewModel(), modifier: Modi
         modifier = modifier
             .fillMaxWidth()
             .animateContentSize()
-            .background(MaterialTheme.colorScheme.primary),
+            .background(MainColor),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -262,6 +245,7 @@ fun SearchSection(homeViewModel: HomeViewModel = hiltViewModel(), modifier: Modi
 }
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PostsSections(
     navController: NavController,
@@ -306,35 +290,94 @@ fun PostsSections(
 //            }
 //        }
 //    }
-    Box(modifier = Modifier.fillMaxSize()) {
+    val toolbarHeight = 60.dp
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.roundToPx().toFloat() }
+    val toolbarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
 
-        if (homeViewModel.postsUiState.isLoading) {
-            Column {
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
 
-                for (i in 1..3) {
+                val delta = available.y
+                val newOffset = toolbarOffsetHeightPx.floatValue + delta
+                toolbarOffsetHeightPx.floatValue = newOffset.coerceIn(-toolbarHeightPx, 0f)
+                return Offset.Zero
+            }
+        }
+    }
+    val articlesPageItems :LazyPagingItems<PostUiState> = homeViewModel.postsUiState.articles.collectAsLazyPagingItems()
 
-                    ShimmerEffect(modifier = Modifier.padding(top = if (i == 1) 70.dp else 10.dp))
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(key1 = articlesPageItems.loadState) {
+        if (articlesPageItems.loadState.refresh is LoadState.Error) {
+
+            snackBarHostState.showSnackbar( "Error: " + (articlesPageItems.loadState.refresh as LoadState.Error).error.message)
+        }
+
+
+    }
+    Scaffold(
+        Modifier
+            .nestedScroll(nestedScrollConnection)
+            .fillMaxSize()
+            .padding(top = 25.dp, bottom = 0.dp)
+            .background(MainColor),
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+
+
+        topBar = {
+            SearchSection(modifier = Modifier
+
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.floatValue.roundToInt()) })
+        }) {
+
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(MainColor)) {
+
+
+            if (articlesPageItems.loadState.refresh is LoadState.Loading) {
+
+                Column {
+
+                    for (i in 1..3) {
+
+                        ShimmerEffect(modifier = Modifier.padding(top = if (i == 1) 70.dp else 10.dp))
+                    }
                 }
+
             }
 
-        } else {
+            else {
 
-            LazyColumn(
-                contentPadding = PaddingValues(
-                    start = 20.dp,
-                    end = 20.dp,
-                    bottom = 55.dp,
-                    top = 70.dp
-                ),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                LazyColumn(
+                    contentPadding = PaddingValues(
+                        start = 10.dp,
+                        end = 10.dp,
+                        bottom = 55.dp,
+                        top = 70.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(5.dp),
 
-                ) {
-                items(homeViewModel.postsUiState.posts, key = { it.id }) { post ->
+                    ) {
+                    items(articlesPageItems.itemCount ) { post ->
 
-                    PostCard(postCardUiState = post, navController, homeViewModel = homeViewModel)
+                        Post(postCardUiState = articlesPageItems[post]!!, navController, homeViewModel = homeViewModel)
 
+                    }
+                    item {
+                        if(articlesPageItems.loadState.append is LoadState.Loading) {
+                            CircularProgressIndicator(modifier = Modifier
+                                .fillMaxWidth()
+                                .size(35.dp)
+                                .align(Alignment.Center))
+                        }
+                    }
                 }
             }
         }
     }
 }
+

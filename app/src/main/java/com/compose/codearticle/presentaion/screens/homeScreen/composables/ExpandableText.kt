@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.Light
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -34,7 +35,8 @@ fun ExpandableText(
     text: String,
     collapsedMaxLine: Int = DEFAULT_MINIMUM_TEXT_LINE,
     showMoreText: String = "... Show More",
-    showMoreStyle: SpanStyle = SpanStyle(fontWeight = Light, color = Color.LightGray),
+    showMoreStyle: SpanStyle = SpanStyle(fontWeight = Bold, color = Color.White
+             ),
     showLessText: String = "Show Less",
     showLessStyle: SpanStyle = showMoreStyle,
 ) {
