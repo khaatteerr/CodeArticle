@@ -124,7 +124,7 @@ fun CustomTab(
                 MyTabItem(
                     isSelected = isSelected,
                     onClick = {
-                        onClick(index)
+                         onClick(index)
                     },
                     tabWidth = tabWidth,
                     text = text,

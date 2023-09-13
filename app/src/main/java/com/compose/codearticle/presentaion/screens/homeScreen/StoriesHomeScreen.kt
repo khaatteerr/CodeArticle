@@ -1,5 +1,6 @@
 package com.compose.codearticle.presentaion.screens.homeScreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Notifications
@@ -31,8 +35,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -43,9 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,26 +54,23 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
-import coil.compose.AsyncImage
 import com.compose.codearticle.presentaion.navigation.Screen
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.CustomTab
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.Post
 import com.compose.codearticle.presentaion.screens.homeScreen.composables.StoryItem
 import com.compose.codearticle.presentaion.screens.homeScreen.uiStates.PostUiState
 import com.compose.codearticle.presentaion.screens.myArticles.MyArticles
-import com.compose.codearticle.presentaion.screens.profileScreen.SearchNotificationSection
-import com.compose.codearticle.presentaion.theme.MainColor
 import com.compose.codearticle.presentaion.theme.Ubuntu
 import com.compose.codearticle.presentaion.utilities.ShimmerEffect
 import com.compose.codearticle.presentaion.utilities.shimmerEffect
 import com.exyte.animatednavbar.utils.noRippleClickable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun StoriesHomeScreen(
     navController: NavController, homeViewModel: HomeViewModel = hiltViewModel()
@@ -131,8 +127,8 @@ fun StoriesHomeScreen(
                             contentPadding = PaddingValues(20.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            items(stories) { storyItem ->
-                                StoryItem(storyItem!!)
+                            items(stories.itemCount) { storyItem ->
+                                StoryItem(stories[storyItem]!!)
                             }
                         }
                     }
@@ -142,18 +138,19 @@ fun StoriesHomeScreen(
 
                             .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        val articlesPageItems: LazyPagingItems<PostUiState> =
-                            homeViewModel.postsUiState.articles.collectAsLazyPagingItems()
+
 
                         val tabList = listOf("Explore", "Discover")
                         val pagerState = rememberPagerState(initialPage = 0)
                         val coroutineScope = rememberCoroutineScope()
 
+
+
                         CustomTab(
                             items = tabList,
                             selectedItemIndex = pagerState.currentPage,
                             onClick = {
-                                coroutineScope.launch {
+                                 coroutineScope.launch {
                                     pagerState.animateScrollToPage(it)
                                 }
                             },
@@ -178,7 +175,7 @@ fun StoriesHomeScreen(
                                 })
                         ) { page: Int ->
                             when (page) {
-                                0 -> Posts(navController, homeViewModel, articlesPageItems)
+                                0 -> Posts(navController, homeViewModel)
 
                                 1 -> MyArticles(navController)
                             }
@@ -196,9 +193,9 @@ fun StoriesHomeScreen(
 fun Posts(
     navController: NavController,
     homeViewModel: HomeViewModel,
-    articlesPageItems: LazyPagingItems<PostUiState>
-) {
-
+ ) {
+    val articlesPageItems: LazyPagingItems<PostUiState> =
+        homeViewModel.postsUiState.articles.collectAsLazyPagingItems()
 
     Box(
         modifier = Modifier
@@ -226,10 +223,10 @@ fun Posts(
                 verticalArrangement = Arrangement.spacedBy(5.dp),
 
                 ) {
-                items(articlesPageItems) { post ->
+                items(articlesPageItems.itemCount) { post ->
 
                     Post(
-                        postCardUiState = post!!, navController, homeViewModel = homeViewModel
+                        postCardUiState = articlesPageItems[post]!!, navController, homeViewModel = homeViewModel
                     )
 
                 }

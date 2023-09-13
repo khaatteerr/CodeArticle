@@ -79,7 +79,7 @@ fun Post(
     ) {
 
 
-        var isLiked by rememberSaveable {
+        var isLiked by rememberSaveable() {
             mutableStateOf(postCardUiState.isLiked)
         }
 
