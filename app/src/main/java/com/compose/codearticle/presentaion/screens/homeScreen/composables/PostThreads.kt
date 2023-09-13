@@ -203,8 +203,7 @@ fun PostThreads(
                         modifier = Modifier
                             .size(20.dp)
                             .bounceClick {
-                                postCardUiState.changeLikeState()
-                            },
+                             },
                         tint = if (postCardUiState.isLiked) Color.Red else MaterialTheme.colorScheme.onBackground
                     )
                     Icon(
@@ -232,7 +231,7 @@ fun PostThreads(
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text(
-                        text = "${postCardUiState.comments_count} replies",
+                        text = "${postCardUiState.commentsCount} replies",
                         color = Color.Gray,
                         fontSize = 14.sp
                     )

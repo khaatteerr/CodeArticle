@@ -1,5 +1,8 @@
 package com.compose.codearticle.presentaion.screens.homeScreen.uiStates
 
+import androidx.compose.ui.graphics.Color
+import com.compose.codearticle.presentaion.theme.Orange
+
 data class PostUiState(
     val postedBy: PostedBy? = null,
     val createdAt: String = "",
@@ -8,13 +11,15 @@ data class PostUiState(
     var isFollowing: Boolean = false,
     var isLiked: Boolean = false,
     var likes: Int? = null,
-    val comments_count:  Int? = null,
+    val commentsCount: Int? = null,
     val media: ImageMedia,
-    val changeLikeState: () -> Unit,
     var isSavedToLocal: Boolean = false,
     var isDropDownMenuActive: Boolean = false,
-    val changeDropDownMenuState: () -> Unit,
-    val SaveToLocal: () -> Unit,
+    val shadowColor: Color = listOf(
+        Orange,
+        Color.Gray,
+        Color.White,
+    ).random()
 )
 
 data class PostModel(

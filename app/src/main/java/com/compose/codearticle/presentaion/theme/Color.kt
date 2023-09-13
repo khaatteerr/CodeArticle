@@ -32,6 +32,10 @@ val SecondaryColor  = Color(0xFF33344E)
 val ThirdColor  = Color(0xFF52526e)
 val CardsColors = Color(0xFF111317)
 val LightGray = Color(0xFFCCCCCC)
+val cardColor = Color(0xFF0C131F)
+val postColor = Color(0xFF2B2E2F)
+val TabIndicatorColor = Color(0xFF3E8BFA)
+
 
 
 

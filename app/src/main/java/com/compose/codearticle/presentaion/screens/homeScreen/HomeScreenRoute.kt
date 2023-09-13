@@ -23,6 +23,6 @@ import com.compose.codearticle.presentaion.navigation.Screen
             }
         }
     ) {
-        HomeScreen(navController = navController)
+        StoriesHomeScreen(navController = navController)
     }
 }
